@@ -1,0 +1,71 @@
+{
+  "facade": "merchant/settlement",
+  "data": [
+    {
+      "id": "DNFnN3fFjjzLn6if5bdGJC",
+      "accountId": "YJCgTf3jrXHkUVzLQ7y4eg",
+      "status": "processing",
+      "currency": "EUR",
+      "payoutInfo": {
+        "label": "Test Bank",
+        "bankCountry": "United States",
+        "wire": true,
+        "bankName": "Test Bank",
+        "bankAddress": "123 Sesame St",
+        "iban": "DE91100000000123456789",
+        "swift": "BOFAUS3N",
+        "accountHolderName": "John Doe",
+        "accountHolderAddress": "123 Sesame St",
+        "accountHolderCountry": "United States"
+      },
+      "dateCreated": "2019-02-27T12:04:22.789Z",
+      "dateExecuted": "2019-02-27T12:04:44.305Z",
+      "openingDate": "2018-01-31T09:00:00.000Z",
+      "closingDate": "2019-02-27T10:00:00.000Z",
+      "openingBalance": 9847.5,
+      "ledgerEntriesSum": -8372.07,
+      "withholdings": [],
+      "withholdingsSum": 0,
+      "totalAmount": 1475.43,
+      "token": "5T1T5yGDEtFDYe8jEVBSYLGmzjACKGtmfPg3UgbFE9z3XHtBstnF5u2EniUFa63W9K"
+    },
+    {
+      "id": "RvNuCTMAkURKimwgvSVEMP",
+      "accountId": "YJCgTf3jrXHkUVzLQ7y4eg",
+      "status": "processing",
+      "currency": "USD",
+      "payoutInfo": {
+        "label": "Test",
+        "bankCountry": "Netherlands",
+        "bankAddress2": "test",
+        "bankAddress": "test",
+        "bankName": "Test",
+        "iban": "NL85ABNA0000000000",
+        "swift": "RABONL2U",
+        "accountHolderCountry": "United States",
+        "accountHolderCity": "test",
+        "accountHolderPostalCode": "test",
+        "accountHolderAddress2": "test",
+        "accountHolderAddress": "test",
+        "accountHolderName": "test",
+        "wire": true
+      },
+      "dateCreated": "2018-08-23T20:45:22.742Z",
+      "dateExecuted": "2018-08-23T20:47:06.912Z",
+      "openingDate": "2018-08-01T13:00:00.000Z",
+      "closingDate": "2018-08-23T13:00:00.000Z",
+      "openingBalance": 23.13,
+      "ledgerEntriesSum": 2956.77,
+      "withholdings": [
+        {
+          "amount": 590.08,
+          "code": "W005",
+          "description": "Pending Refunds"
+        }
+      ],
+      "withholdingsSum": 590.08,
+      "totalAmount": 2389.82,
+      "token": "5T1T5yGDEtFDYe8jEVBSYLHKewPYXZrDLvZxtXBzn69fBbZYitYQYH4BFYFvvaVU7D"
+    }
+  ]
+}

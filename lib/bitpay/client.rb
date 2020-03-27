@@ -14,13 +14,13 @@ module BitPay
   #
   module SDK
     class Client
-      include BitPay::RestConnector 
+      include BitPay::RestConnector
       # @return [Client]
       # @example
       #  # Create a client with a pem file created by the bitpay client:
       #  client = BitPay::SDK::Client.new
       def initialize(opts={})
-        @pem                = opts[:pem] || ENV['BITPAY_PEM'] || KeyUtils.generate_pem 
+        @pem                = opts[:pem] || ENV['BITPAY_PEM'] || KeyUtils.generate_pem
         @key                = KeyUtils.create_key @pem
         @priv_key           = KeyUtils.get_private_key @key
         @pub_key            = KeyUtils.get_public_key @key
@@ -37,7 +37,7 @@ module BitPay
 
         # Option to disable certificate validation in extraordinary circumstance.  NOT recommended for production use
         @https.verify_mode = opts[:insecure] == true ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER
-        
+
         # Option to enable http request debugging
         @https.set_debug_output($stdout) if opts[:debug] == true
       end
@@ -61,9 +61,9 @@ module BitPay
       ## Create bitcoin invoice
       #
       #   Defaults to pos facade, also works with merchant facade
-      # 
+      #
       def create_invoice(price:, currency:, facade: 'pos', params:{})
-        raise BitPay::ArgumentError, "Illegal Argument: Price must be formatted as a float" unless 
+        raise BitPay::ArgumentError, "Illegal Argument: Price must be formatted as a float" unless
           price.is_a?(Numeric) ||
           /^[[:digit:]]+(\.[[:digit:]]{2})?$/.match(price) ||
           currency == 'BTC' && /^[[:digit:]]+(\.[[:digit:]]{1,6})?$/.match(price)
@@ -74,9 +74,9 @@ module BitPay
         invoice["data"]
       end
 
-      ## Gets the privileged merchant-version of the invoice		
-      #   Requires merchant facade token		
-      #		
+      ## Gets the privileged merchant-version of the invoice
+      #   Requires merchant facade token
+      #
       def get_invoice(id:)
         token = get_token('merchant')
         invoice = get(path: "invoices/#{id}", token: token)
@@ -89,13 +89,13 @@ module BitPay
         invoice = get(path: "invoices/#{id}", public: true)
         invoice["data"]
       end
-      
-      
+
+
       ## Refund paid BitPay invoice
       #
-      #   If invoice["data"]["flags"]["refundable"] == true the a refund address was 
+      #   If invoice["data"]["flags"]["refundable"] == true the a refund address was
       #   provided with the payment and the refund_address parameter is an optional override
-      #  
+      #
       #   Amount and Currency are required fields for fully paid invoices but optional
       #   for under or overpaid invoices which will otherwise be completely refunded
       #
@@ -109,10 +109,10 @@ module BitPay
         refund = post(path: "invoices/#{id}/refunds", token: invoice["token"], params: params)
         refund["data"]
       end
-      
+
       ## Get All Refunds for Invoice
-      #   Returns an array of all refund requests for a specific invoice, 
-      # 
+      #   Returns an array of all refund requests for a specific invoice,
+      #
       #   Requires merchant facade token
       #
       #  @example:
@@ -137,7 +137,7 @@ module BitPay
         refund = get(path: urlpath, token: invoice["token"])
         refund["data"]
       end
-      
+
       ## Cancel Refund
       #   Requires merchant facade token
       #
@@ -149,7 +149,62 @@ module BitPay
         refund = get_refund(invoice_id: invoice_id, request_id: request_id)
         deletion = delete(path: urlpath, token: refund["token"])
         deletion["data"]
-      end      
+      end
+
+      # Fetch settlements based on a date range
+      #
+      #  @example:
+      #    client.get_settlements(params: { startDate: '2019-12-01', endDate: '2020-12-01', currency: 'USD', limit: 1 })
+      #
+      def get_settlements(params: {})
+        possible_params = %i[startDate endDate status currency limit offset]
+        filtered_params = possible_params.each_with_object({}) do |key, result|
+          result[key] = params[key] if params.key?(key)
+        end
+
+        token = get_token('merchant')
+        settlements = get(
+          path: 'settlements', token: token, params: filtered_params
+        )
+
+        settlements['data']
+      end
+
+      # Fetch a specific settlement
+      #
+      #  @example:
+      #    client.get_settlement(settlement_id: 'RvNuCTMAkURKimwgvSVEMP')
+      #
+      def get_settlement(settlement_id:)
+        token = get_token('merchant')
+        settlements = get(
+          path: "settlements/#{settlement_id}",
+          token: token
+        )
+
+        settlements['data']
+      end
+
+      # Fetch a reconciliation report
+      #
+      # This endpoint allows merchant to retrieve a detailed report of
+      # the activity within the settlement period,
+      # in order to reconcile incoming settlements from BitPay.
+      #
+      #  @example:
+      #    client.get_reconciliation_report(
+      #      settlement_id: 'RvNuCTMAkURKimwgvSVEMP',
+      #      settlement_token: '5T1T5yGDEtFDYe8jEVBSYLHKewPYXZrDLvZxtXBzn69fBbZYitYQYH4BFYFvvaVU7D'
+      #    )
+      #
+      def get_reconciliation_report(settlement_id:, settlement_token:)
+        settlements = get(
+          path: "settlements/#{settlement_id}/reconciliationreport",
+          token: settlement_token
+        )
+
+        settlements['data']
+      end
 
       ## Checks that the passed tokens are valid by
       #  comparing them to those that are authorized by the server

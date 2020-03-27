@@ -16,13 +16,17 @@ module BitPay
       end
     end
 
-    def get(path:, token: nil, public: false)
+    def get(path:, token: nil, public: false, params: {})
       urlpath = '/' + path
-      token_prefix = if urlpath.include? '?' then '&token=' else '?token=' end
+      token_prefix = urlpath.include?('?') ? '&token=' : '?token='
       urlpath = urlpath + token_prefix + token if token
+      urlpath = params.each_with_object(urlpath) do |(k, v), result|
+        result << "&#{k}=#{v}"
+      end
+
       request = Net::HTTP::Get.new urlpath
       unless public
-        request['X-Signature'] = KeyUtils.sign(@uri.to_s + urlpath, @priv_key) 
+        request['X-Signature'] = KeyUtils.sign(@uri.to_s + urlpath, @priv_key)
         request['X-Identity'] = @pub_key
       end
       process_request(request)
@@ -46,7 +50,7 @@ module BitPay
       urlpath = '/' + path
       urlpath = urlpath + '?token=' + token if token
       request = Net::HTTP::Delete.new urlpath
-      request['X-Signature'] = KeyUtils.sign(@uri.to_s + urlpath, @priv_key) 
+      request['X-Signature'] = KeyUtils.sign(@uri.to_s + urlpath, @priv_key)
       request['X-Identity'] = @pub_key
       process_request(request)
     end

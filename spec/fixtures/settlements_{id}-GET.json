@@ -1,0 +1,41 @@
+{
+  "facade": "merchant/settlement",
+  "data": {
+    "id": "TEST_SETTLEMENT_ID",
+    "accountId": "YJCgTf3jrXHkUVzLQ7y4eg",
+    "status": "processing",
+    "currency": "USD",
+    "payoutInfo": {
+      "label": "Test",
+      "bankCountry": "Netherlands",
+      "bankAddress": "test",
+      "bankAddress2": "test",
+      "bankName": "Test",
+      "iban": "NL85ABNA0000000000",
+      "swift": "RABONL2U",
+      "accountHolderCountry": "Netherlands",
+      "accountHolderCity": "test",
+      "accountHolderPostalCode": "test",
+      "accountHolderAddress": "test",
+      "accountHolderAddress2": "test",
+      "accountHolderName": "test",
+      "wire": true
+    },
+    "dateCreated": "2018-08-23T20:45:22.742Z",
+    "dateExecuted": "2018-08-23T20:47:06.912Z",
+    "openingDate": "2018-08-01T13:00:00.000Z",
+    "closingDate": "2018-08-23T13:00:00.000Z",
+    "openingBalance": 23.13,
+    "ledgerEntriesSum": 2956.77,
+    "withholdings": [
+      {
+        "amount": 590.08,
+        "code": "W005",
+        "description": "Pending Refunds"
+      }
+    ],
+    "withholdingsSum": 590.08,
+    "totalAmount": 2389.82,
+    "token": "5T1T5yGDEtFDYe8jEVBSYLHKewPYXZrDLvZxtXBzn69fBbZYitYQYH4BFYFvvaVU7D"
+  }
+}
