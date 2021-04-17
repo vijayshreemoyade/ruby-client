@@ -77,8 +77,8 @@ module BitPay
       ## Gets the privileged merchant-version of the invoice
       #   Requires merchant facade token
       #
-      def get_invoice(id:)
-        token = get_token('merchant')
+      def get_invoice(id:, merchant_token: nil)
+        token = merchant_token || get_token('merchant')
         invoice = get(path: "invoices/#{id}", token: token)
         invoice["data"]
       end
