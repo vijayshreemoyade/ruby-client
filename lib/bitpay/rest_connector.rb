@@ -99,7 +99,7 @@ module BitPay
     #
 
     def get_token(facade)
-      token = @tokens[facade] || refresh_tokens[facade] || raise(BitPayError, "Not authorized for facade: #{facade}")
+      @tokens[facade.to_sym] || @tokens[facade] || refresh_tokens[facade] || raise(BitPayError, "Not authorized for facade: #{facade}")
     end
 
   end
